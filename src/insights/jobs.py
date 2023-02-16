@@ -6,10 +6,9 @@ import csv
 @lru_cache
 def read(path: str) -> List[Dict]:
     with open(path) as file:
-        reader = csv.reader(file, delimiter=",")
-        data = []
-        for row in reader:
-            data.append(row)
+        reader = csv.DictReader(file, delimiter=",")
+        data = [row for row in reader]
+
         return data
 
 
