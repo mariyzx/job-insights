@@ -1,22 +1,20 @@
 from typing import List, Dict
+import csv
+
+
+def read(path: str) -> List[Dict]:
+    with open(path) as file:
+        reader = csv.DictReader(file, delimiter=",")
+        data = [row for row in reader]
+
+        return data
 
 
 def get_unique_industries(path: str) -> List[str]:
-    """Checks all different industries and returns a list of them
-
-    Must call `read`
-
-    Parameters
-    ----------
-    path : str
-        Must be passed to `read`
-
-    Returns
-    -------
-    list
-        List of unique industries
-    """
-    raise NotImplementedError
+    industries = read(path)
+    unique_industries = {industry["industry"] for industry in industries}
+    withoutEmptyIndustry = list(filter(None, unique_industries))
+    return withoutEmptyIndustry
 
 
 def filter_by_industry(jobs: List[Dict], industry: str) -> List[Dict]:
