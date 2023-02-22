@@ -30,33 +30,50 @@ def get_min_salary(path: str) -> int:
     return max_salary
 
 
+def is_not_empty(*values):
+    is_valid_values = True
+    for value in values:
+        if (value == ''):
+            is_valid_values = False
+            break
+    return is_valid_values
+
+
+def is_int(*values):
+    is_valid_values = True
+    for value in values:
+        if (type(value) != int):
+            is_valid_values = False
+            break
+    return is_valid_values
+
+
 def matches_salary_range(job: Dict, salary: Union[int, str]) -> bool:
     if 'min_salary' not in job or 'max_salary' not in job:
         raise ValueError('empty fields')
-    if type(job["min_salary"]) != int or type(job["max_salary"]) != int:
+
+    min_salary = job["min_salary"]
+    max_salary = job["max_salary"]
+
+    if (not is_int(min_salary, max_salary)):
         raise ValueError('value is not numeric')
-    elif job["min_salary"] > job["max_salary"]:
+    elif min_salary > max_salary:
         raise ValueError('min_salary greater than max_salary')
     else:
-        return job["min_salary"] <= int(salary) <= job["max_salary"]
+        return min_salary <= int(salary) <= max_salary
 
 
 def filter_by_salary_range(
     jobs: List[dict],
     salary: Union[str, int]
 ) -> List[Dict]:
-    """Filters a list of jobs by salary range
+    list_jobs = []
 
-    Parameters
-    ----------
-    jobs : list
-        The jobs to be filtered
-    salary : int
-        The salary to be used as filter
-
-    Returns
-    -------
-    list
-        Jobs whose salary range contains `salary`
-    """
-    raise NotImplementedError
+    try:
+        for job in jobs:
+            if int(job["min_salary"]) <= int(salary) <= int(job["max_salary"]):
+                list_jobs.append(job)
+    except TypeError:
+        raise ValueError("error")
+    finally:
+        return list_jobs
